@@ -58,16 +58,12 @@
 ;; that adheres to `line?`.
 (define/contract (parse-line l)
   (-> string? line?)
-  
-  ;; Split the input line into pieces
+  ;; pieces is a list of strings
   (define pieces (string-split l))
-  
-  ;; Match the pieces and construct the corresponding line
   (match pieces
-    [`("NODE" ,n) (string-append "NODE " n)]            ; If it's a NODE command
-    [`("LINK" ,n1 ,n2) (string-append "LINK " n1 " " n2)]  ; If it's a LINK command
-    [_ (error 'parse-line "Not valid input")]))     ; Error for invalid input
-
+    [`("NODE" ,n)
+     'todo]
+    [_ 'todo]))
 
 ;; starter code
 ;; read a file by mapping over its lines  
@@ -96,8 +92,7 @@
 (define (forward-link? graph n0 n1)
   ;; first, look up the set of nodes which are adjacent to (i.e., neighbors of) n0
   ;; then, check if n1 is a member of that set
-   (let ((adj-nodes (hash-ref graph n0 #f)))
-     (and adj-nodes (set-member? adj-nodes n1))))
+  'todo)
 
 ;; TODO
 ;; Add a directed link (from,to) to the graph graph, return the new graph with 
@@ -105,9 +100,7 @@
 ;;
 ;; Hint: use hash-set, hash-ref, and set-add.
 (define (add-link graph from to)
-  (define new-graph
-    (hash-set graph from (set-add (hash-ref graph from (set)) to)))
-  new-graph)
+  'todo)
 
 ;; TODO
 ;; Perform the transitive closure of the graph. This is the most challenging 
@@ -123,6 +116,7 @@
 ;; of a foldl, but it makes the code much easier to understand in my opinion.
 (define (transitive-closure graph)
   'todo)
+
 
 ;;
 ;; END PROJECT CODE, DO NOT TOUCH BELOW
