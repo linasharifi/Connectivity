@@ -56,18 +56,12 @@
 ;; 
 ;; Hint: use string-split and match, make sure to produce something
 ;; that adheres to `line?`.
-(define/contract (parse-line l)
-  (-> string? line?)
-  
-  ;; Split the input line into pieces
+(define (parse-line l)
   (define pieces (string-split l))
-  
-  ;; Match the pieces and construct the corresponding line
   (match pieces
-    [`("NODE" ,n) (string-append "NODE " n)]            ; If it's a NODE command
-    [`("LINK" ,n1 ,n2) (string-append "LINK " n1 " " n2)]  ; If it's a LINK command
-    [_ (error 'parse-line "Not valid input")]))     ; Error for invalid input
-
+    [`("NODE" ,n) `(node ,n)]
+    [`("LINK" ,n1 ,n2) `(link ,n1 ,n2)]
+    [_ (error 'parse-line "Not valid input")])) 
 
 ;; starter code
 ;; read a file by mapping over its lines  
@@ -85,8 +79,14 @@
 ;; Hint: use (hash), (set n), hash-set, set-add, hash-ref, and similar.
 (define/contract (build-init-graph input)
   (-> input-format? graph?)
-  ;; TODO TODO TODO 
-  (hash))
+  
+  (define (process cmd graph)
+    (match cmd
+      [`(node ,node) (hash-set graph node (set node))] 
+      [`(link ,from ,to) (hash-set graph from (set-add (hash-ref graph from (set)) to))] 
+      [_ graph])) 
+  
+  (foldl (lambda (cmd g) (process cmd g)) (hash) input))
 
 ;; TODO
 ;; Check whether or not there is a forward line from n0 to n1 in
@@ -123,6 +123,10 @@
 ;; of a foldl, but it makes the code much easier to understand in my opinion.
 (define (transitive-closure graph)
   'todo)
+;;  (define (loop graph)
+;;  (if (equal? (one-step-transitive graph) graph)
+;;      graph ;
+;;      (loop (one-step-transitive graph)))) ;; keep going around 
 
 ;;
 ;; END PROJECT CODE, DO NOT TOUCH BELOW
