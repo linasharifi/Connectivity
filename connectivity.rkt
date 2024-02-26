@@ -57,11 +57,10 @@
 ;; Hint: use string-split and match, make sure to produce something
 ;; that adheres to `line?`.
 (define (parse-line l)
-  (define pieces (string-split l))
-  (match pieces
+  (define split (string-split l))
+  (match split
     [`("NODE" ,n) `(node ,n)]
-    [`("LINK" ,n1 ,n2) `(link ,n1 ,n2)]
-    [_ (error 'parse-line "Not valid input")])) 
+    [`("LINK" ,n1 ,n2) `(link ,n1 ,n2)])) 
 
 ;; starter code
 ;; read a file by mapping over its lines  
