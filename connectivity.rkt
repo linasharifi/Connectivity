@@ -122,11 +122,25 @@
 ;; `add-link`. It is always possible to use a recursive helper function instead
 ;; of a foldl, but it makes the code much easier to understand in my opinion.
 (define (transitive-closure graph)
-  'todo)
-;;  (define (loop graph)
-;;  (if (equal? (one-step-transitive graph) graph)
-;;      graph ;
-;;      (loop (one-step-transitive graph)))) ;; keep going around 
+  (define (one-step-transitive graph)
+    (foldl (lambda (n0 graph)
+             (foldl (lambda (n1 graph)
+                      (foldl (lambda (n2 graph)
+                               (hash-set graph n0 (set-add (hash-ref graph n0 (set)) n2)))
+                             graph
+                             (set->list (hash-ref graph n1))))
+                    graph
+                    (set->list (hash-ref graph n0))))
+           graph
+           (hash-keys graph)))
+
+  (define (loop graph)
+    (let ((next-graph (one-step-transitive graph)))
+      (if (equal? next-graph graph)
+          graph
+          (loop next-graph))))
+
+  (loop graph))
 
 ;;
 ;; END PROJECT CODE, DO NOT TOUCH BELOW
