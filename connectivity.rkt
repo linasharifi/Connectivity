@@ -82,11 +82,11 @@
   
   (define (process cmd graph)
     (match cmd
-      [`(node ,node) (hash-set graph node (set node))] 
-      [`(link ,from ,to) (hash-set graph from (set-add (hash-ref graph from (set)) to))] 
-      [_ graph])) 
+      [`(node ,node) (hash-set graph node (set node))]
+      [`(link ,from ,to) (hash-update graph from (lambda (s) (set-add s to)) (set to))]
+      [_ graph]))
   
-  (foldl (lambda (cmd g) (process cmd g)) (hash) input))
+  (foldl process (hash) input))
 
 ;; TODO
 ;; Check whether or not there is a forward line from n0 to n1 in
